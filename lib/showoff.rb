@@ -157,6 +157,13 @@ class ShowOff < Sinatra::Application
 
 
     def process_markdown(name, content, static=false, pdf=false)
+      if settings.encoding and content.respond_to?(:force_encoding)
+        content.force_encoding(settings.encoding)
+      end
+      engine_options = ShowOffUtils.showoff_renderer_options(settings.pres_dir)
+      @logger.debug "renderer: #{Tilt[:markdown].name}"
+      @logger.debug "render options: #{engine_options.inspect}"
+
       # if there are no !SLIDE markers, then make every H1 define a new slide
       unless content =~ /^\<?!SLIDE/m
         content = content.gsub(/^# /m, "<!SLIDE>\n# ")
@@ -224,7 +231,7 @@ class ShowOff < Sinatra::Application
           content += "<div class=\"#{content_classes.join(' ')}\" ref=\"#{name}\">\n"
         end
 
-        sl = Tilt[:markdown].new { slide.text }.render
+        sl = Tilt[:markdown].new(nil, nil, engine_options) { slide.text }.render
         sl = update_p_classes(sl)
         sl = update_special_content(sl, @slide_count, name)
         sl = update_image_paths(name, sl, static, pdf)
