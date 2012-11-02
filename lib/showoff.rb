@@ -658,6 +658,11 @@ class ShowOff < Sinatra::Application
           FileUtils.copy(path, File.join(file_dir, File.basename(path)))
         }
 
+        # ..., copy any custom favicon.ico
+        Dir.glob("#{pres_dir}/favicon.ico").each { |path|
+          FileUtils.copy(path, File.join(file_dir, File.basename(path)))
+        }
+
         # ... and copy all needed image files
         data.scan(/img src=[\"\'].\/file\/(.*?)[\"\']/).flatten.each do |path|
           dir = File.dirname(path)
@@ -703,6 +708,16 @@ class ShowOff < Sinatra::Application
     end
   end
 
+  get %r{/(favicon.ico)} do
+    path = params[:captures].first
+    full_path = File.join(settings.pres_dir, path)
+    if File.exist?(full_path)
+        send_file full_path
+    else
+        raise Sinatra::NotFound
+    end
+  end
+
   get %r{/(.*)} do
     @title = ShowOffUtils.showoff_title
     @pause_msg = ShowOffUtils.pause_msg
@@ -711,13 +726,11 @@ class ShowOff < Sinatra::Application
 
     @asset_path = (env['SCRIPT_NAME'] || '').gsub(/\/?$/, '/').gsub(/^\//, '')
 
-    if (what != "favicon.ico")
-      data = send(what)
-      if data.is_a?(File)
-        send_file data.path
-      else
-        data
-      end
+    data = send(what)
+    if data.is_a?(File)
+      send_file data.path
+    else
+      data
     end
   end
 
