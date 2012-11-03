@@ -157,7 +157,7 @@ class ShowOff < Sinatra::Application
 
 
     def process_markdown(name, content, static=false, pdf=false)
-      if settings.encoding and content.respond_to?(:force_encoding)
+      if settings.respond_to?(:encoding) and content.respond_to?(:force_encoding)
         content.force_encoding(settings.encoding)
       end
       engine_options = ShowOffUtils.showoff_renderer_options(settings.pres_dir)
