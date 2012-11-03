@@ -616,7 +616,7 @@ class ShowOff < Sinatra::Application
       what = "index" if !what
 
       # Nasty hack to get the actual ShowOff module
-      showoff = ShowOff.new
+      showoff = ShowOff.new.app
       while !showoff.is_a?(ShowOff)
         showoff = showoff.instance_variable_get(:@app)
       end
