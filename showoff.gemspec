@@ -4,11 +4,11 @@ require 'showoff/version'
 Gem::Specification.new do |s|
   s.name              = "showoff"
   s.version           = SHOWOFF_VERSION
-  s.date              = "2011-09-10"
+  s.date              = "2012-11-03"
   s.summary           = "The best damn presentation software a developer could ever love."
-  s.homepage          = "http://github.com/schacon/showoff"
-  s.email             = "schacon@gmail.com"
-  s.authors           = ["Scott Chacon"]
+  s.homepage          = "http://github.com/joejulian/showoff"
+  s.email             = "me@joejulian.name"
+  s.authors           = ["Scott Chacon", "Joe Julian"]
   s.has_rdoc          = false
   s.require_path      = "lib"
   s.executables       = %w( showoff )
@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency      "redcarpet"
   s.add_dependency      "nokogiri"
   s.add_dependency      "json"
-  s.add_dependency      "gli","~> 2"
+  s.add_dependency      "gli","~> 2.4"
   s.add_dependency      "parslet"
   s.add_development_dependency "mg"
   s.description       = <<-desc
